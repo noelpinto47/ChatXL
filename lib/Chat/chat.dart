@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../Database/databasehelper.dart';
 import '../Elements/checkinternet.dart';
-import 'chat_api.dart';
+// import 'chat_api.dart';
 import 'controller.dart';
 
 class ChatFragment extends StatefulWidget {
@@ -21,7 +21,7 @@ class ChatFragmentState extends State<ChatFragment> {
 
   final ScrollController _scrollController = ScrollController();
 
-  ChatAPI api = ChatAPI();
+  // ChatAPI api = ChatAPI();
 
   @override
   Widget build(BuildContext context) {
