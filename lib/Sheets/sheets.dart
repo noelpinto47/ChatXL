@@ -158,12 +158,24 @@ class SheetsFragmentState extends State<SheetsFragment> {
   }
 
   Future<void> readExcelData(String filePath) async {
-    var file = File(filePath);
-    var bytes = await file.readAsBytes();
-    var excel = prefix.Excel.decodeBytes(bytes);
+    try {
+      var file = File(filePath);
+      var bytes = await file.readAsBytes();
 
-    // ignore: unused_local_variable
-    var sheet = excel.tables.keys.first;
+      try {
+        var excel = prefix.Excel.decodeBytes(bytes);
+        // ignore: unused_local_variable
+        var sheet = excel.tables.keys.first;
+      } catch (e) {
+        // If Excel parsing fails due to custom formats, that's okay
+        // The file can still be uploaded to the API for processing
+        print(
+            "Excel preview not available for this file, but it can still be used.");
+      }
+    } catch (e) {
+      print("Error reading Excel file: $e");
+      rethrow;
+    }
   }
 
   Future<void> pickFile(BuildContext context) async {
