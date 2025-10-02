@@ -7,6 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 import '../Account/register.dart';
 
@@ -236,19 +237,46 @@ class FullScreenAvatarPageState extends State<FullScreenAvatarPage> {
                                     setState(() {
                                       isLoading = true;
                                     });
-                                    FirebaseService service = FirebaseService();
+
+                                    final FirebaseService service =
+                                        FirebaseService();
                                     try {
-                                      await service.signInWithGoogle();
-                                      Get.offAll(() => const HomePage());
-                                    } catch (e) {
-                                      if (e is FirebaseAuthException) {
-                                        showMessage(e.message!);
+                                      final user =
+                                          await service.signInWithGoogle();
+
+                                      if (user != null) {
+                                        // Successfully signed in
+                                        c.signedIn.value = true;
+                                        Get.offAll(() => const HomePage());
+                                      } else {
+                                        // User cancelled sign-in
+                                        setState(() {
+                                          isLoading = false;
+                                        });
                                       }
+                                    } on GoogleSignInException catch (e) {
+                                      // Handle Google Sign-In specific errors
+                                      if (e.code !=
+                                          GoogleSignInExceptionCode.canceled) {
+                                        showMessage(
+                                            e.description ?? 'Sign-in failed');
+                                      }
+                                      setState(() {
+                                        isLoading = false;
+                                      });
+                                    } on FirebaseAuthException catch (e) {
+                                      showMessage(
+                                          e.message ?? 'Authentication failed');
+                                      setState(() {
+                                        isLoading = false;
+                                      });
+                                    } catch (e) {
+                                      showMessage(
+                                          'An unexpected error occurred');
+                                      setState(() {
+                                        isLoading = false;
+                                      });
                                     }
-                                    setState(() {
-                                      c.signedIn.value = true;
-                                      isLoading = false;
-                                    });
                                   },
                                   child: const SizedBox(
                                     width: 180,
