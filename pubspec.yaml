@@ -1,5 +1,5 @@
 name: chatdb
-description: A AI application inspired from ChatGPT that communicates with databases
+description: ChatXL - AI-powered chat application for Excel files
 publish_to: 'none' 
 version: 1.0.0+1
 
