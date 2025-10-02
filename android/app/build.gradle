@@ -49,7 +49,6 @@ android {
             // Enable code shrinking, obfuscation, and optimization
             minifyEnabled true
             shrinkResources true
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
 }
